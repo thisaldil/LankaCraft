@@ -12,6 +12,8 @@ import Home from "./pages/Home";
 import Payment from "./pages/Payment";
 import ContactUs from "./pages/ContactUs";
 import ProductDetails from "./pages/ProductDetails";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
 
 const Layout = () => {
   return (
@@ -27,6 +29,8 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
       <Route index element={<Home />} />
+      <Route path="login" element={<Login />} />
+      <Route path="dashboard" element={<Dashboard />} />
       <Route path="payment" element={<Payment />} />
       <Route path="contactus" element={<ContactUs />} />
       <Route path="/product/:id" element={<ProductDetails />} />

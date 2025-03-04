@@ -8,6 +8,7 @@ import {
   User,
   Heart,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const categories = [
   {
@@ -159,12 +160,12 @@ export const Navbar = () => {
             >
               <Search className="h-6 w-6 text-stone-700" />
             </button>
-            <a
-              href="#"
+            <Link
+              to="/login"
               className="hidden sm:block p-2 hover:bg-stone-100 rounded-full"
             >
               <User className="h-6 w-6 text-stone-700" />
-            </a>
+            </Link>
             <a
               href="#"
               className="hidden sm:block p-2 hover:bg-stone-100 rounded-full"
