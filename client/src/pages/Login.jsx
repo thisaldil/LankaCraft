@@ -1,67 +1,100 @@
-// src/pages/Login.js
 import { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
-  const [email, setEmail] = useState("");
+const AdminLogin = () => {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:5000/api/users/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await response.json();
-    if (response.ok) {
-      localStorage.setItem("token", data.token);
-      navigate("/admin");
-    } else {
-      alert(data.message);
+    setError("");
+    setLoading(true);
+
+    if (!username || !password) {
+      setError("Username and password are required.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/admin/adminLogin",
+        {
+          username,
+          password,
+        }
+      );
+
+      // Save token in localStorage securely
+      localStorage.setItem("token", response.data.token);
+
+      // Redirect to admin dashboard
+      navigate("/admindashboard");
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Login failed. Please try again."
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-          Welcome Back
-        </h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h2 className="text-2xl font-bold text-center mb-4">Admin Login</h2>
+
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-gray-700">Email</label>
+            <label className="block text-gray-700">Username</label>
             <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full p-2 border rounded-md"
               required
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-700"
             />
           </div>
+
           <div>
             <label className="block text-gray-700">Password</label>
             <input
               type="password"
-              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-2 border rounded-md"
               required
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-700"
             />
           </div>
+
           <button
             type="submit"
-            className="w-full bg-amber-900 text-white py-2 rounded-lg hover:bg-amber-800 transition-all"
+            className={`w-full text-white py-2 rounded-md transition ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-500 hover:bg-blue-600"
+            }`}
+            disabled={loading}
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+
+        <p className="text-sm text-center text-gray-600 mt-3">
+          Forgot password?{" "}
+          <a href="/reset-password" className="text-blue-500">
+            Reset here
+          </a>
+        </p>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default AdminLogin;
