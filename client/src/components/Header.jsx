@@ -71,6 +71,7 @@ const categories = [
 export const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const isLoggedIn = false; // Example, replace this with real authentication state
 
   return (
     <header className="w-full bg-white border-b border-stone-200">
@@ -160,12 +161,23 @@ export const Navbar = () => {
             >
               <Search className="h-6 w-6 text-stone-700" />
             </button>
-            <Link
-              to="/login"
-              className="hidden sm:block p-2 hover:bg-stone-100 rounded-full"
-            >
-              <User className="h-6 w-6 text-stone-700" />
-            </Link>
+            {isLoggedIn ? (
+              // If logged in, show user profile icon
+              <Link
+                to="/profile"
+                className="hidden sm:block p-2 hover:bg-stone-100 rounded-full"
+              >
+                <User className="h-6 w-6 text-stone-700" />
+              </Link>
+            ) : (
+              // If not logged in, show login button
+              <Link
+                to="/login"
+                className="hidden sm:block p-2 hover:bg-stone-100 rounded-full"
+              >
+                <User className="h-6 w-6 text-stone-700" />
+              </Link>
+            )}
             <a
               href="#"
               className="hidden sm:block p-2 hover:bg-stone-100 rounded-full"
