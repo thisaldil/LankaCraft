@@ -68,7 +68,7 @@ const categories = [
   },
 ];
 
-export const Navbar = () => {
+export const Header = ({ cartQuantity }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const isLoggedIn = false; // Example, replace this with real authentication state
@@ -94,7 +94,7 @@ export const Navbar = () => {
         </div>
       </div>
 
-      {/* Main navbar */}
+      {/* Main Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex justify-between items-center h-20">
           {/* Left section - Mobile menu & Logo */}
@@ -137,7 +137,7 @@ export const Navbar = () => {
                           {subcategory.featured.map((item) => (
                             <li key={item}>
                               <a
-                                href="#"
+                                href="./products"
                                 className="block text-stone-700 hover:text-white hover:bg-amber-700 px-4 py-2 rounded-lg transition-all duration-300 ease-in-out"
                               >
                                 {item}
@@ -189,9 +189,12 @@ export const Navbar = () => {
               className="p-2 hover:bg-stone-100 rounded-full relative"
             >
               <ShoppingBag className="h-6 w-6 text-stone-700" />
-              <span className="absolute -top-1 -right-1 bg-amber-900 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                0
-              </span>
+              {/* Display the total quantity */}
+              {cartQuantity > 0 && (
+                <span className="absolute -top-1 -right-1 bg-amber-900 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartQuantity}
+                </span>
+              )}
             </a>
           </div>
         </div>
@@ -216,4 +219,4 @@ export const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Header;

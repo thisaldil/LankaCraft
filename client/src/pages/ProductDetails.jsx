@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-
 const products = [
   {
     id: 1,
@@ -102,7 +101,10 @@ const ProductDetails = () => {
           <p className="text-2xl text-blue-600 font-semibold mb-6">
             ${product.price}
           </p>
-          <button className="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold">
+          <button
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold"
+            onClick={() => navigate("./cart")} // Adjust the route based on your app
+          >
             Add to Cart
           </button>
           <h3 className="text-xl font-semibold mt-6">Reviews:</h3>
