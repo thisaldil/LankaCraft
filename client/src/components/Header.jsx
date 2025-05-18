@@ -9,7 +9,6 @@ import {
   Heart,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-
 const categories = [
   {
     name: "Traditional Bags",
@@ -66,12 +65,59 @@ const categories = [
       },
     ],
   },
+  {
+    name: "Gifts",
+    subcategories: [
+      {
+        name: "Birthday Gifts",
+        featured: [
+          "Personalized Keepsakes",
+          "Handmade Cards",
+          "Cultural Gift Boxes",
+          "Traditional Goodies",
+        ],
+      },
+      {
+        name: "Wrapped Candy Boxes",
+        featured: [
+          "Assorted Treat Packs",
+          "Custom Sweet Hampers",
+          "Festive Wrapped Boxes",
+          "Organic Confections",
+        ],
+      },
+      {
+        name: "Festive Hampers",
+        featured: [
+          "Holiday Hampers",
+          "Seasonal Gift Sets",
+          "Ethnic Celebration Boxes",
+          "Curated Artisan Combos",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Wall Arts",
+    subcategories: [
+      {
+        name: "Canvas Paintings",
+        featured: [
+          "Abstract Canvas",
+          "Floral Canvas",
+          "Traditional Motifs",
+          "Minimalist Art",
+        ],
+      },
+    ],
+  },
 ];
 
 export const Header = ({ cartQuantity }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const isLoggedIn = false; // Example, replace this with real authentication state
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   return (
     <header className="w-full bg-white border-b border-stone-200">
@@ -111,7 +157,7 @@ export const Header = ({ cartQuantity }) => {
             </button>
             <a href="/" className="ml-4 lg:ml-0">
               <span className="text-3xl font-serif text-amber-900">
-                ArtisanCraft
+                LankaCrafts
               </span>
             </a>
           </div>
@@ -154,42 +200,82 @@ export const Header = ({ cartQuantity }) => {
           </nav>
 
           {/* Right section - Search, Account & Cart */}
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-6 relative">
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
               className="p-2 hover:bg-stone-100 rounded-full"
             >
               <Search className="h-6 w-6 text-stone-700" />
             </button>
-            {isLoggedIn ? (
-              // If logged in, show user profile icon
-              <Link
-                to="/profile"
-                className="hidden sm:block p-2 hover:bg-stone-100 rounded-full"
-              >
-                <User className="h-6 w-6 text-stone-700" />
-              </Link>
+
+            {localStorage.getItem("customerPhoto") ? (
+              <div className="relative hidden sm:block">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="focus:outline-none"
+                >
+                  <img
+                    src={localStorage.getItem("customerPhoto")}
+                    alt="Customer"
+                    className="w-9 h-9 rounded-full border-2 border-amber-700 object-cover"
+                  />
+                </button>
+                {showUserMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-stone-200 rounded-lg shadow-lg z-50">
+                    <div
+                      onClick={() => {
+                        localStorage.removeItem("customerToken");
+                        localStorage.removeItem("customerPhoto");
+                        localStorage.removeItem("customerEmail");
+                        localStorage.removeItem("customerName");
+                        window.location.reload();
+                      }}
+                      className="block px-4 py-2 text-stone-700 hover:bg-red-100 hover:text-red-700 cursor-pointer transition"
+                    >
+                      Logout
+                    </div>
+                  </div>
+                )}
+              </div>
             ) : (
-              // If not logged in, show login button
-              <Link
-                to="/login"
-                className="hidden sm:block p-2 hover:bg-stone-100 rounded-full"
-              >
-                <User className="h-6 w-6 text-stone-700" />
-              </Link>
+              <div className="relative hidden sm:block">
+                <button
+                  className="p-2 hover:bg-stone-100 rounded-full"
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                >
+                  <User className="h-6 w-6 text-stone-700" />
+                </button>
+                {showUserMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-stone-200 rounded-lg shadow-lg z-50">
+                    <Link
+                      to="/CustomerLogin"
+                      className="block px-4 py-2 text-stone-700 hover:bg-amber-100 hover:text-amber-900 transition"
+                    >
+                      Buy on LankaCrafts
+                    </Link>
+                    <Link
+                      to="/login"
+                      className="block px-4 py-2 text-stone-700 hover:bg-amber-100 hover:text-amber-900 transition"
+                    >
+                      Sell on LankaCrafts
+                    </Link>
+                  </div>
+                )}
+              </div>
             )}
+
             <a
               href="#"
               className="hidden sm:block p-2 hover:bg-stone-100 rounded-full"
             >
               <Heart className="h-6 w-6 text-stone-700" />
             </a>
+
             <a
               href="#"
               className="p-2 hover:bg-stone-100 rounded-full relative"
             >
               <ShoppingBag className="h-6 w-6 text-stone-700" />
-              {/* Display the total quantity */}
               {cartQuantity > 0 && (
                 <span className="absolute -top-1 -right-1 bg-amber-900 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {cartQuantity}

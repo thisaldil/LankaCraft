@@ -18,6 +18,11 @@ import Dashboard from "./pages/Dashboard";
 import { CartProvider } from "./pages/CartContext";
 import CartPage from "./components/cart/CartPage";
 import ProductsPage from "./pages/ProductsPage";
+import AdminDashboard from "./pages/AdminDashboard";
+import CustomerLogin from "./pages/CustomerLogin";
+
+import ManageProducts from "./pages/seller/ManageProducts";
+import AddProduct from "./pages/seller/AddProduct";
 
 const Layout = () => {
   const [cartQuantity, setCartQuantity] = useState(0);
@@ -42,6 +47,13 @@ const router = createBrowserRouter(
       <Route path="/product/:id" element={<ProductDetails />} />
       <Route path="/product/:id/cart" element={<CartPage />} />
       <Route path="products" element={<ProductsPage />} />
+      <Route path="/admindashboard" element={<AdminDashboard />} />
+      <Route path="/CustomerLogin" element={<CustomerLogin />} />
+      <Route path="/seller" element={<AdminDashboard />}>
+        <Route path="manage-products" element={<ManageProducts />} />
+
+        <Route path="add-product" element={<AddProduct />} />
+      </Route>
     </Route>
   )
 );
