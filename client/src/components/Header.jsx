@@ -261,7 +261,7 @@ export const Header = ({ cartQuantity }) => {
                       Sell on LankaCrafts
                     </Link>
                     <Link
-                      to="/login"
+                      to="/login?source=inventory"
                       className="block px-4 py-2 text-stone-700 hover:bg-amber-100 hover:text-amber-900 transition"
                     >
                       Inventory

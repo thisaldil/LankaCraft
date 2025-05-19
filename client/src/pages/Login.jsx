@@ -1,19 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Login = () => {
-  const [view, setView] = useState("login"); // login | register | reset
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const defaultView = queryParams.get("view") || "login";
+  const isInventory = queryParams.get("source") === "inventory";
+
+  const [view, setView] = useState(defaultView); // login | register | reset
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
-
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isInventory) setView("login");
+  }, [isInventory]);
 
   const resetFields = () => {
     setUsername("");
@@ -29,17 +37,14 @@ const Login = () => {
     e.preventDefault();
     setError("");
     setLoading(true);
-
     try {
       const res = await axios.post("http://localhost:5000/admin/adminLogin", {
         username,
         password,
       });
-
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("adminUsername", res.data.username);
       localStorage.setItem("adminEmail", res.data.email);
-
       setSuccess("Login successful");
       navigate("/seller/manage-products");
     } catch (err) {
@@ -54,7 +59,6 @@ const Login = () => {
     setError("");
     setSuccess("");
     setLoading(true);
-
     try {
       const res = await axios.post(
         "http://localhost:5000/admin/registerAdmin",
@@ -64,7 +68,6 @@ const Login = () => {
           password,
         }
       );
-
       setSuccess(res.data.message);
       setView("login");
     } catch (err) {
@@ -79,12 +82,10 @@ const Login = () => {
     setError("");
     setSuccess("");
     setLoading(true);
-
     try {
       const res = await axios.post("http://localhost:5000/admin/requestOtp", {
         email,
       });
-
       setSuccess(res.data.message);
     } catch (err) {
       setError(err.response?.data?.message || "OTP request failed");
@@ -98,7 +99,6 @@ const Login = () => {
     setError("");
     setSuccess("");
     setLoading(true);
-
     try {
       const res = await axios.post(
         "http://localhost:5000/admin/changePassword",
@@ -108,7 +108,6 @@ const Login = () => {
           newPassword,
         }
       );
-
       setSuccess(res.data.message);
       setView("login");
     } catch (err) {
@@ -128,7 +127,8 @@ const Login = () => {
     >
       <div className="bg-white bg-opacity-90 p-6 rounded-lg shadow-lg w-96 backdrop-blur-md space-y-4">
         <h2 className="text-2xl font-bold text-center mb-2">
-          {view === "login" && "Seller Login"}
+          {view === "login" &&
+            (isInventory ? "Inventory Login" : "Seller Login")}
           {view === "register" && "Register Admin"}
           {view === "reset" && "Reset Password"}
         </h2>
@@ -170,7 +170,7 @@ const Login = () => {
           </form>
         )}
 
-        {view === "register" && (
+        {view === "register" && !isInventory && (
           <form onSubmit={handleRegister} className="space-y-4">
             <input
               type="text"
@@ -224,7 +224,6 @@ const Login = () => {
                 Send OTP
               </button>
             </form>
-
             <form onSubmit={handleChangePassword} className="space-y-2">
               <input
                 type="text"
@@ -272,7 +271,7 @@ const Login = () => {
               Login
             </button>
           )}
-          {view !== "register" && (
+          {!isInventory && view !== "register" && (
             <button
               onClick={() => {
                 setView("register");
