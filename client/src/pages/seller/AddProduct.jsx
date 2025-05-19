@@ -3,10 +3,50 @@ import axios from "axios";
 const API_URI = import.meta.env?.VITE_API_URI ?? "http://localhost:5000";
 
 const categories = {
-  Bags: ["Travel Bags", "Shopping Bags", "Handcrafted Purses"],
-  Jewelry: ["Men's Collection", "Women's Collection"],
-  Gifts: ["Birthday Gifts", "Wrapped Candy Boxes", "Festive Hampers"],
-  "Wall Arts": ["Canvas Paintings", "Wooden Wall Décor", "Metal Wall Hangings"],
+  "Traditional Bags": [
+    "Leather Travel Bags",
+    "Canvas Duffels",
+    "Traditional Backpacks",
+    "Handwoven Carriers",
+    "Market Totes",
+    "Woven Baskets",
+    "Traditional Pouches",
+    "Eco-friendly Bags",
+    "Evening Clutches",
+    "Embroidered Bags",
+    "Traditional Wallets",
+    "Festival Bags",
+  ],
+  Jewelry: [
+    "Traditional Necklaces",
+    "Ethnic Bracelets",
+    "Cultural Rings",
+    "Prayer Beads",
+    "Statement Necklaces",
+    "Heritage Pieces",
+    "Tribal Jewelry",
+    "Handcrafted Earrings",
+  ],
+  Gifts: [
+    "Personalized Keepsakes",
+    "Handmade Cards",
+    "Cultural Gift Boxes",
+    "Traditional Goodies",
+    "Assorted Treat Packs",
+    "Custom Sweet Hampers",
+    "Festive Wrapped Boxes",
+    "Organic Confections",
+    "Holiday Hampers",
+    "Seasonal Gift Sets",
+    "Ethnic Celebration Boxes",
+    "Curated Artisan Combos",
+  ],
+  "Wall Arts": [
+    "Abstract Canvas",
+    "Floral Canvas",
+    "Traditional Motifs",
+    "Minimalist Art",
+  ],
 };
 
 const colors = [
@@ -61,7 +101,7 @@ const AddProduct = () => {
         color: "",
         size: "",
         price: "",
-        discount: 0,
+        discount: "",
         image: "",
         stock: 10,
         isFeatured: false,

@@ -4,7 +4,7 @@ const nodemailer = require("nodemailer");
 require("dotenv").config();
 const Admin = require("../models/Admin");
 
-//admin login
+// admin login
 exports.adminLogin = async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -12,14 +12,23 @@ exports.adminLogin = async (req, res) => {
     if (!admin) {
       return res.status(400).json({ message: "Invalid username" });
     }
+
     const isMatch = await bcrypt.compare(password, admin.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid password" });
     }
+
     const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET);
+
     admin.token = token;
     await admin.save();
-    res.status(200).json({ message: "Login successful", token });
+
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      username: admin.username,
+      email: admin.email,
+    });
   } catch (error) {
     res.status(500).json({ message: "Error logging in", error: error.message });
   }

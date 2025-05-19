@@ -37,8 +37,11 @@ const Login = () => {
       });
 
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("adminUsername", res.data.username);
+      localStorage.setItem("adminEmail", res.data.email);
+
       setSuccess("Login successful");
-      navigate("/admindashboard");
+      navigate("/seller/manage-products");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     } finally {

@@ -4,6 +4,7 @@ import {
   Outlet,
   createRoutesFromElements,
   Route,
+  useLocation,
 } from "react-router-dom";
 import { useState } from "react";
 import React from "react";
@@ -20,22 +21,28 @@ import CartPage from "./components/cart/CartPage";
 import ProductsPage from "./pages/ProductsPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import CustomerLogin from "./pages/CustomerLogin";
-
 import ManageProducts from "./pages/seller/ManageProducts";
 import AddProduct from "./pages/seller/AddProduct";
 
+// Layout with conditional Header/Footer
 const Layout = () => {
+  const location = useLocation();
   const [cartQuantity, setCartQuantity] = useState(0);
+
+  const hideHeaderFooter =
+    location.pathname.startsWith("/seller") ||
+    location.pathname.startsWith("/admindashboard");
 
   return (
     <div>
-      <Header cartQuantity={cartQuantity} />
+      {!hideHeaderFooter && <Header cartQuantity={cartQuantity} />}
       <Outlet context={{ cartQuantity, setCartQuantity }} />
-      <Footer />
+      {!hideHeaderFooter && <Footer />}
     </div>
   );
 };
 
+// App-level router
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
@@ -47,17 +54,20 @@ const router = createBrowserRouter(
       <Route path="/product/:id" element={<ProductDetails />} />
       <Route path="/product/:id/cart" element={<CartPage />} />
       <Route path="products" element={<ProductsPage />} />
-      <Route path="/admindashboard" element={<AdminDashboard />} />
       <Route path="/CustomerLogin" element={<CustomerLogin />} />
+
+      {/* Admin routes */}
+      <Route path="/admindashboard" element={<AdminDashboard />} />
+
       <Route path="/seller" element={<AdminDashboard />}>
         <Route path="manage-products" element={<ManageProducts />} />
-
         <Route path="add-product" element={<AddProduct />} />
       </Route>
     </Route>
   )
 );
 
+// App root
 function App() {
   return (
     <CartProvider>
