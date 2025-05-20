@@ -4,7 +4,7 @@ const nodemailer = require("nodemailer");
 require("dotenv").config();
 const Admin = require("../models/Admin");
 
-// admin login
+//login admin
 exports.adminLogin = async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -19,15 +19,16 @@ exports.adminLogin = async (req, res) => {
     }
 
     const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET);
-
     admin.token = token;
     await admin.save();
 
+    // ✅ Include role, username, email
     res.status(200).json({
       message: "Login successful",
       token,
       username: admin.username,
       email: admin.email,
+      role: admin.role,
     });
   } catch (error) {
     res.status(500).json({ message: "Error logging in", error: error.message });
@@ -36,7 +37,7 @@ exports.adminLogin = async (req, res) => {
 
 //register admin
 exports.registerAdmin = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, role } = req.body;
   try {
     const admin = await Admin.findOne({
       username,
@@ -50,6 +51,7 @@ exports.registerAdmin = async (req, res) => {
       username,
       email,
       password: hashedPassword,
+      role: role || "seller",
     });
     await newAdmin.save();
     res.status(201).json({ message: "Admin created successfully" });

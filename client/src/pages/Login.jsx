@@ -18,6 +18,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
+  const [role, setRole] = useState("seller");
 
   useEffect(() => {
     if (isInventory) setView("login");
@@ -42,9 +43,25 @@ const Login = () => {
         username,
         password,
       });
+
+      // Check role match
+      if (isInventory && res.data.role !== "inventory") {
+        setError("Access denied. Not an inventory account.");
+        setLoading(false);
+        return;
+      }
+
+      if (!isInventory && res.data.role !== "seller") {
+        setError("Access denied. Not a seller account.");
+        setLoading(false);
+        return;
+      }
+
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("adminUsername", res.data.username);
       localStorage.setItem("adminEmail", res.data.email);
+      localStorage.setItem("role", res.data.role);
+
       setSuccess("Login successful");
       navigate("/seller/manage-products");
     } catch (err) {
@@ -66,6 +83,7 @@ const Login = () => {
           username,
           email,
           password,
+          role,
         }
       );
       setSuccess(res.data.message);
@@ -188,6 +206,18 @@ const Login = () => {
               className="w-full p-2 border rounded-md"
               required
             />
+            <select
+              name="role"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full p-2 border rounded-md"
+              required
+            >
+              <option value="">Select Role</option>
+              <option value="seller">Seller</option>
+              <option value="inventory">Inventory</option>
+            </select>
+
             <input
               type="password"
               placeholder="Password"
