@@ -23,6 +23,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import CustomerLogin from "./pages/CustomerLogin";
 import ManageProducts from "./pages/seller/ManageProducts";
 import AddProduct from "./pages/seller/AddProduct";
+import Users from "./pages/seller/Users";
 
 // Layout with conditional Header/Footer
 const Layout = () => {
@@ -62,6 +63,7 @@ const router = createBrowserRouter(
       <Route path="/seller" element={<AdminDashboard />}>
         <Route path="manage-products" element={<ManageProducts />} />
         <Route path="add-product" element={<AddProduct />} />
+        <Route path="users" element={<Users />} />
       </Route>
     </Route>
   )

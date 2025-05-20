@@ -125,3 +125,44 @@ exports.changePassword = async (req, res) => {
       .json({ message: "Error changing password", error: error.message });
   }
 };
+exports.getAllAdmins = async (req, res) => {
+  try {
+    const admins = await Admin.find().select("-password"); // exclude passwords
+    res.status(200).json(admins);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error fetching users", error: err.message });
+  }
+};
+
+// Update user by ID
+exports.updateAdmin = async (req, res) => {
+  const { id } = req.params;
+  const { username, email, role } = req.body;
+
+  try {
+    const admin = await Admin.findByIdAndUpdate(
+      id,
+      { username, email, role },
+      { new: true, runValidators: true }
+    );
+    if (!admin) return res.status(404).json({ message: "Admin not found" });
+    res.status(200).json({ message: "Admin updated", admin });
+  } catch (err) {
+    res.status(500).json({ message: "Update failed", error: err.message });
+  }
+};
+
+// Delete user by ID
+exports.deleteAdmin = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const admin = await Admin.findByIdAndDelete(id);
+    if (!admin) return res.status(404).json({ message: "Admin not found" });
+    res.status(200).json({ message: "Admin deleted" });
+  } catch (err) {
+    res.status(500).json({ message: "Deletion failed", error: err.message });
+  }
+};

@@ -7,6 +7,9 @@ const {
   registerAdmin,
   requestOtp,
   changePassword,
+  getAllAdmins,
+  updateAdmin,
+  deleteAdmin,
 } = require("../controllers/adminController");
 
 // //tours
@@ -21,5 +24,14 @@ router.post("/adminLogin", adminLogin);
 router.post("/registerAdmin", registerAdmin);
 router.post("/requestOtp", requestOtp);
 router.post("/changePassword", changePassword);
+
+// Get all users
+router.get("/all", getAllAdmins);
+
+// Update user
+router.put("/:id", updateAdmin);
+
+// Delete user
+router.delete("/:id", deleteAdmin);
 
 module.exports = router;

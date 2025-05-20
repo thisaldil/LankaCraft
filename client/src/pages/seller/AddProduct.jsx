@@ -90,8 +90,15 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const sellerUsername = localStorage.getItem("adminUsername");
+    const sellerEmail = localStorage.getItem("adminEmail");
+
     try {
-      await axios.post(`${API_URI}/products/create`, formData);
+      await axios.post(`${API_URI}/products/create`, {
+        ...formData,
+        sellerUsername,
+        sellerEmail,
+      });
       setMessage("✅ Product added successfully!");
       setFormData({
         product: "",

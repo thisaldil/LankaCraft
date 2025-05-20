@@ -101,6 +101,14 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    sellerUsername: {
+      type: String,
+      required: true,
+    },
+    sellerEmail: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );

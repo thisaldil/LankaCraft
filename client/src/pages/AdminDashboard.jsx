@@ -10,7 +10,7 @@ const AdminDashboard = () => {
     localStorage.removeItem("adminUsername");
     localStorage.removeItem("adminEmail");
     localStorage.removeItem("role");
-    window.location.replace("/login");
+    window.location.replace("/");
   };
 
   const sidebarLinks = [

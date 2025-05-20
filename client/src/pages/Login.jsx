@@ -215,7 +215,7 @@ const Login = () => {
             >
               <option value="">Select Role</option>
               <option value="seller">Seller</option>
-              <option value="inventory">Inventory</option>
+              {/* <option value="inventory">Inventory</option> */}
             </select>
 
             <input

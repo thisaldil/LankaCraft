@@ -1,5 +1,4 @@
 const Product = require("../models/Product");
-
 // Create a new product
 exports.createProduct = async (req, res) => {
   try {
@@ -76,5 +75,19 @@ exports.getByCategory = async (req, res) => {
     res.status(200).json(results);
   } catch (err) {
     res.status(500).json({ message: "Failed to filter", error: err.message });
+  }
+};
+
+// Get featured products
+exports.getFeaturedProducts = async (req, res) => {
+  try {
+    const featured = await Product.find({ isFeatured: true }).sort({
+      createdAt: -1,
+    });
+    res.status(200).json(featured);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Failed to get featured products", error: err.message });
   }
 };
