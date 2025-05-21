@@ -86,8 +86,25 @@ exports.getFeaturedProducts = async (req, res) => {
     });
     res.status(200).json(featured);
   } catch (err) {
+    res.status(500).json({
+      message: "Failed to fetch featured products",
+      error: err.message,
+    });
+  }
+};
+// Get discounted products
+exports.getDiscountedProducts = async (req, res) => {
+  try {
+    const discounted = await Product.find({ discount: { $gt: 0 } }).sort({
+      createdAt: -1,
+    });
+    res.status(200).json(discounted);
+  } catch (err) {
     res
       .status(500)
-      .json({ message: "Failed to get featured products", error: err.message });
+      .json({
+        message: "Failed to fetch discounted products",
+        error: err.message,
+      });
   }
 };

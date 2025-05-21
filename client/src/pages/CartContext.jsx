@@ -18,7 +18,10 @@ const cartReducer = (state, action) => {
           ),
         };
       }
-      return { ...state, items: [...state.items, action.payload] };
+      return {
+        ...state,
+        items: [...state.items, { ...action.payload, quantity: 1 }],
+      };
 
     case "REMOVE_ITEM":
       return {
@@ -51,31 +54,9 @@ const cartReducer = (state, action) => {
   }
 };
 
+// ✅ Start with an empty cart
 const initialState = {
-  items: [
-    {
-      id: 1,
-      name: "Modern Leather Tote",
-      description: "Premium leather tote bag with reinforced handles",
-      color: "Caramel Brown",
-      size: "Large",
-      price: 129.99,
-      quantity: 1,
-      image:
-        "https://images.unsplash.com/photo-1591561954557-26941169b49e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
-    },
-    {
-      id: 2,
-      name: "Canvas Backpack",
-      description: "Durable canvas backpack with laptop compartment",
-      color: "Navy Blue",
-      size: "Medium",
-      price: 89.99,
-      quantity: 2,
-      image:
-        "https://images.unsplash.com/photo-1622560480654-d96214fdc887?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80",
-    },
-  ],
+  items: [],
   couponCode: "",
   discount: 0,
 };

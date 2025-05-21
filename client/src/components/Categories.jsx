@@ -4,6 +4,8 @@ import axios from "axios";
 
 const FeaturedProducts = () => {
   const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(0);
+  const itemsPerPage = 4;
 
   useEffect(() => {
     const fetchFeatured = async () => {
@@ -17,21 +19,45 @@ const FeaturedProducts = () => {
     fetchFeatured();
   }, []);
 
+  const paginatedProducts = products.slice(
+    page * itemsPerPage,
+    (page + 1) * itemsPerPage
+  );
+
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-      <h2 className="text-2xl font-bold mb-8">Seasonal Offers</h2>
+      <h2 className="text-2xl font-bold mb-8">Featured Offers</h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {products.map((product, index) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        {paginatedProducts.map((product, index) => (
           <ProductCard
             key={index}
             name={product.product}
             image={product.image}
             price={product.price}
-            originalPrice={product.price / ((100 - product.discount) / 100)} // calculate
+            originalPrice={product.price / ((100 - product.discount) / 100)}
             isOnSale={product.discount > 0}
           />
         ))}
+      </div>
+
+      <div className="flex justify-center space-x-4">
+        <button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
+          disabled={page === 0}
+          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded disabled:opacity-50"
+        >
+          Prev
+        </button>
+        <button
+          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages - 1))}
+          disabled={page >= totalPages - 1}
+          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded disabled:opacity-50"
+        >
+          Next
+        </button>
       </div>
     </section>
   );

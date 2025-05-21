@@ -6,6 +6,7 @@ interface ProductCardProps {
   price: number;
   originalPrice?: number;
   isOnSale?: boolean;
+  onClick?: () => void; // optional click handler
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -14,36 +15,41 @@ const ProductCard: React.FC<ProductCardProps> = ({
   price,
   originalPrice,
   isOnSale,
+  onClick,
 }) => {
   return (
-    <div className="group relative p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+    <div
+      className="group relative bg-white rounded-xl shadow hover:shadow-lg transition duration-300 p-4 cursor-pointer"
+      onClick={onClick}
+    >
+      {/* Image Section */}
       <div className="relative w-full aspect-square overflow-hidden rounded-lg bg-gray-100">
         <img
           src={image}
           alt={name}
-          className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
         {isOnSale && (
           <div className="absolute top-3 right-3">
             <div className="relative">
               <div className="absolute inset-0 bg-red-500 rounded-full opacity-30 blur-md"></div>
-              <div className="relative bg-gradient-to-br from-red-500 to-red-600 text-white px-4 py-1.5 rounded-full shadow-lg border border-red-400 transition-all duration-300">
-                <span className="font-semibold tracking-wide text-sm">
-                  SALE
-                </span>
+              <div className="relative bg-gradient-to-br from-red-500 to-red-600 text-white px-3 py-1 rounded-full shadow border border-red-400 text-sm font-semibold tracking-wide">
+                SALE
               </div>
             </div>
           </div>
         )}
       </div>
+
+      {/* Details */}
       <div className="mt-4 text-center">
-        <h3 className="text-lg font-medium text-gray-900">{name}</h3>
-        <div className="flex items-center justify-center mt-2 space-x-2">
-          <p className="text-xl font-semibold text-gray-900">
-            ${price.toFixed(2)}
-          </p>
-          {originalPrice && (
-            <p className="text-md text-gray-500 line-through">
+        <h3 className="text-base md:text-lg font-medium text-gray-800 truncate">
+          {name}
+        </h3>
+        <div className="flex items-center justify-center mt-1 space-x-2">
+          <p className="text-lg font-bold text-gray-900">${price.toFixed(2)}</p>
+          {originalPrice && originalPrice > price && (
+            <p className="text-sm line-through text-gray-500">
               ${originalPrice.toFixed(2)}
             </p>
           )}
