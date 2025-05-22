@@ -2,6 +2,7 @@ import React from "react";
 import Categories from "../components/Categories";
 import FeaturedProducts from "../components/FeaturedProducts";
 import craftPhoto from "../assets/image/craftphoto.webp";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -23,9 +24,11 @@ const Hero = () => {
               Explore our unique collection of traditional and eco-friendly
               designs
             </p>
-            <button className="bg-[#8B4513] text-white px-8 py-3 rounded-lg hover:bg-[#A0522D] transition-colors">
-              Shop Now
-            </button>
+            <Link to="/products">
+              <button className="bg-[#8B4513] text-white px-8 py-3 rounded-lg hover:bg-[#A0522D] transition-colors">
+                Shop Now
+              </button>
+            </Link>
           </div>
         </div>
       </div>

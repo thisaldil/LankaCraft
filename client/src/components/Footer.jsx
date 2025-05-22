@@ -27,7 +27,7 @@ const footerLinks = {
   ],
   company: [
     "Our Story",
-    "Artisan Partners",
+    "LankaCraft Partners",
     "Sustainability",
     "Careers",
     "Blog",
@@ -48,10 +48,10 @@ const Footer = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
           <div className="max-w-2xl mx-auto text-center">
             <h3 className="text-3xl font-serif text-amber-100 mb-4">
-              Join Our Artisan Family
+              Join Our LankaCrafts Family
             </h3>
             <p className="text-stone-300 mb-8">
-              Subscribe to receive exclusive offers, artisan stories, and
+              Subscribe to receive exclusive offers, LankaCrafts stories, and
               traditional craft inspiration
             </p>
             <div className="flex gap-2 max-w-md mx-auto">
@@ -71,11 +71,11 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
           <div className="md:col-span-4">
             <h2 className="text-3xl font-serif text-amber-100 mb-6">
-              ArtisanCraft
+              LankaCrafts
             </h2>
             <p className="text-stone-400 mb-6">
               Celebrating traditional craftsmanship and cultural heritage
-              through carefully curated artisanal pieces.
+              through carefully curated LankaCrafts pieces.
             </p>
             <div className="space-y-4">
               <div className="flex items-center gap-3 text-stone-400">
@@ -84,15 +84,18 @@ const Footer = () => {
               </div>
               <div className="flex items-center gap-3 text-stone-400">
                 <Phone className="h-5 w-5 text-amber-700" />
-                <span>+1 (234) 567-8900</span>
+                <span>+94 75 212 0365</span>
               </div>
               <div className="flex items-center gap-3 text-stone-400">
                 <Mail className="h-5 w-5 text-amber-700" />
-                <span>hello@artisancraft.com</span>
+                <span>tdimith10@gmail.com</span>
               </div>
               <div className="flex items-center gap-3 text-stone-400">
                 <MapPin className="h-5 w-5 text-amber-700" />
-                <span>123 Artisan Street, Craft City</span>
+                <span>Galle,Srilanka</span>
+                <MapPin className="h-5 w-5 text-amber-700" />
+
+                <span>Crawley,UK</span>
               </div>
             </div>
           </div>
@@ -123,7 +126,7 @@ const Footer = () => {
               {[Facebook, Instagram, Twitter, Youtube].map((Icon, index) => (
                 <a
                   key={index}
-                  href="#"
+                  href="https://www.instagram.com/dr.notorio.us"
                   className="text-stone-400 hover:text-amber-100 transition-colors"
                 >
                   <Icon className="h-6 w-6" />
@@ -150,7 +153,7 @@ const Footer = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-stone-500 text-sm">
-              &copy; 2023 ArtisanCraft. All rights reserved.
+              &copy; 2025 LankaCrafts. All rights reserved.
             </p>
             <div className="flex space-x-6 text-sm text-stone-500">
               {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(

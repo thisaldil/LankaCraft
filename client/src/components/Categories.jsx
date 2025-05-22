@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ProductCard from "./ProductCard";
 import axios from "axios";
 
@@ -6,6 +7,7 @@ const FeaturedProducts = () => {
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(0);
   const itemsPerPage = 4;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFeatured = async () => {
@@ -31,14 +33,19 @@ const FeaturedProducts = () => {
       <h2 className="text-2xl font-bold mb-8">Featured Offers</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        {paginatedProducts.map((product, index) => (
+        {paginatedProducts.map((product) => (
           <ProductCard
-            key={index}
+            key={product._id}
             name={product.product}
             image={product.image}
             price={product.price}
-            originalPrice={product.price / ((100 - product.discount) / 100)}
+            originalPrice={
+              product.discount > 0
+                ? product.price / ((100 - product.discount) / 100)
+                : undefined
+            }
             isOnSale={product.discount > 0}
+            onClick={() => navigate(`/product/${product._id}`)}
           />
         ))}
       </div>

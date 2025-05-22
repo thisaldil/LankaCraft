@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import {
   Search,
-  ShoppingBag,
+  ShoppingBagIcon,
   Menu,
   X,
   ChevronDown,
   User,
-  Heart,
+  Home,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useCart } from "../pages/CartContext";
+
 const categories = [
   {
     name: "Traditional Bags",
@@ -118,6 +120,8 @@ export const Header = ({ cartQuantity }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const isLoggedIn = false; // Example, replace this with real authentication state
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const { state } = useCart();
+  const cartCount = state.items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <header className="w-full bg-white border-b border-stone-200">
@@ -126,7 +130,7 @@ export const Header = ({ cartQuantity }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between py-2">
             <p className="text-sm font-medium">
-              Free worldwide shipping on orders over $100
+              Free worldwide shipping on orders over $1000
             </p>
             <div className="hidden sm:flex space-x-6 text-sm">
               <a href="#" className="hover:text-amber-200">
@@ -202,12 +206,12 @@ export const Header = ({ cartQuantity }) => {
 
           {/* Right section - Search, Account & Cart */}
           <div className="flex items-center space-x-6 relative">
-            <button
+            {/* <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
               className="p-2 hover:bg-stone-100 rounded-full"
             >
               <Search className="h-6 w-6 text-stone-700" />
-            </button>
+            </button> */}
 
             {localStorage.getItem("customerPhoto") ? (
               <div className="relative hidden sm:block">
@@ -272,20 +276,20 @@ export const Header = ({ cartQuantity }) => {
             )}
 
             <a
-              href="#"
+              href="/products"
               className="hidden sm:block p-2 hover:bg-stone-100 rounded-full"
             >
-              <Heart className="h-6 w-6 text-stone-700" />
+              <Home className="h-6 w-6 text-stone-700" />
             </a>
 
             <a
-              href="#"
+              href="/cart"
               className="p-2 hover:bg-stone-100 rounded-full relative"
             >
-              <ShoppingBag className="h-6 w-6 text-stone-700" />
-              {cartQuantity > 0 && (
-                <span className="absolute -top-1 -right-1 bg-amber-900 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {cartQuantity}
+              <ShoppingBagIcon className="w-6 h-6 text-stone-700" />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5">
+                  {cartCount}
                 </span>
               )}
             </a>
@@ -295,13 +299,13 @@ export const Header = ({ cartQuantity }) => {
 
       {/* Search Overlay */}
       {isSearchOpen && (
-        <div className="absolute top-full left-0 w-full bg-white border-t border-stone-200 p-4 shadow-lg">
-          <div className="max-w-3xl mx-auto">
+        <div className="fixed top-0 left-0 w-full bg-white border-b border-stone-200 shadow-md z-50">
+          <div className="max-w-5xl mx-auto px-4 py-4">
             <div className="relative">
               <input
                 type="text"
                 placeholder="Search for artisanal products..."
-                className="w-full px-4 py-3 pl-12 rounded-lg border-2 border-stone-200 focus:outline-none focus:border-amber-900"
+                className="w-full px-4 py-3 pl-12 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-800"
               />
               <Search className="absolute left-4 top-3.5 h-5 w-5 text-stone-400" />
             </div>

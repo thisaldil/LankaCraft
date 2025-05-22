@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useCart } from "../pages/CartContext";
 import { ShoppingBagIcon, ChevronDownIcon } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import ProductCard from "../components/ProductCard";
 
 const API_URI = import.meta.env?.VITE_API_URI ?? "http://localhost:5000";
 
@@ -34,43 +35,7 @@ const sortOptions = [
   { label: "Name: Z to A", value: "name-desc" },
 ];
 
-const ProductCard = ({ product, onAddToCart }) => (
-  <div className="bg-white rounded-lg shadow p-4 hover:shadow-md transition">
-    <div className="w-full h-64 overflow-hidden rounded mb-4">
-      <img
-        src={product.image}
-        alt={product.product}
-        className="w-full h-full object-cover"
-      />
-    </div>
-    <div className="space-y-2">
-      <h3 className="text-lg font-semibold text-gray-800">{product.product}</h3>
-      <p className="text-sm text-gray-500">{product.description}</p>
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-lg font-bold text-gray-900">
-            Rs.{" "}
-            {(
-              product.price -
-              (product.price * (product.discount || 0)) / 100
-            ).toFixed(2)}
-          </p>
-          <p className="text-sm text-gray-500">
-            {product.color} • {product.size}
-          </p>
-        </div>
-        <button
-          onClick={() => onAddToCart(product)}
-          className="bg-blue-600 text-white px-3 py-2 rounded-md text-sm hover:bg-blue-700"
-        >
-          <ShoppingBagIcon className="w-5 h-5 inline-block mr-1" /> View
-        </button>
-      </div>
-    </div>
-  </div>
-);
-
-const ProductPage = () => {
+const ProductsPage = () => {
   const { addItem } = useCart();
   const [products, setProducts] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -84,6 +49,7 @@ const ProductPage = () => {
   });
 
   const location = useLocation();
+  const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const filterQuery = searchParams.get("filter");
 
@@ -117,7 +83,7 @@ const ProductPage = () => {
     if (filterQuery) {
       result = result.filter(
         (p) =>
-          p.product.toLowerCase().includes(filterQuery.toLowerCase()) ||
+          p.product?.toLowerCase().includes(filterQuery.toLowerCase()) ||
           p.category?.toLowerCase().includes(filterQuery.toLowerCase()) ||
           p.subcategory?.toLowerCase().includes(filterQuery.toLowerCase())
       );
@@ -150,10 +116,6 @@ const ProductPage = () => {
     }));
   };
 
-  const handleAddToCart = (product) => {
-    addItem({ ...product, quantity: 1 });
-  };
-
   if (loading) return <p className="text-center mt-10">Loading products...</p>;
   if (error) return <p className="text-center text-red-600 mt-10">{error}</p>;
 
@@ -174,13 +136,12 @@ const ProductPage = () => {
                 </option>
               ))}
             </select>
-            <ChevronDownIcon className="absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
           </div>
         </div>
 
         <div className="flex gap-8">
-          {/* Filter Sidebar */}
           <aside className="hidden lg:block w-64 space-y-6">
+            {/* Size Filters */}
             <div className="bg-white p-4 rounded shadow">
               <h3 className="text-lg font-medium mb-2">Size</h3>
               {filters.sizes.map((size) => (
@@ -195,6 +156,8 @@ const ProductPage = () => {
                 </label>
               ))}
             </div>
+
+            {/* Color Filters */}
             <div className="bg-white p-4 rounded shadow">
               <h3 className="text-lg font-medium mb-2">Color</h3>
               {filters.colors.map((color) => (
@@ -209,6 +172,8 @@ const ProductPage = () => {
                 </label>
               ))}
             </div>
+
+            {/* Price Range Filters */}
             <div className="bg-white p-4 rounded shadow">
               <h3 className="text-lg font-medium mb-2">Price</h3>
               {filters.priceRanges.map((range) => (
@@ -234,13 +199,20 @@ const ProductPage = () => {
             </div>
           </aside>
 
-          {/* Product Grid */}
           <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full">
             {filtered.map((product) => (
               <ProductCard
                 key={product._id}
-                product={product}
-                onAddToCart={handleAddToCart}
+                name={product.product || "No Name"}
+                image={product.image || "/fallback.jpg"}
+                price={product.price || 0}
+                originalPrice={
+                  product.discount > 0
+                    ? product.price / ((100 - product.discount) / 100)
+                    : undefined
+                }
+                isOnSale={product.discount > 0}
+                onClick={() => navigate(`/product/${product._id}`)}
               />
             ))}
           </section>
@@ -250,4 +222,4 @@ const ProductPage = () => {
   );
 };
 
-export default ProductPage;
+export default ProductsPage;

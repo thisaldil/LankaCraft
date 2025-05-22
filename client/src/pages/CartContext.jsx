@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, useContext, useReducer, useEffect } from "react";
 
 const CartContext = createContext();
 
@@ -18,10 +18,7 @@ const cartReducer = (state, action) => {
           ),
         };
       }
-      return {
-        ...state,
-        items: [...state.items, { ...action.payload, quantity: 1 }],
-      };
+      return { ...state, items: [...state.items, action.payload] };
 
     case "REMOVE_ITEM":
       return {
@@ -54,35 +51,31 @@ const cartReducer = (state, action) => {
   }
 };
 
-// ✅ Start with an empty cart
-const initialState = {
-  items: [],
-  couponCode: "",
-  discount: 0,
+const getInitialState = () => {
+  const stored = localStorage.getItem("cartState");
+  return stored
+    ? JSON.parse(stored)
+    : {
+        items: [],
+        couponCode: "",
+        discount: 0,
+      };
 };
 
 const CartProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(cartReducer, initialState);
+  const [state, dispatch] = useReducer(cartReducer, {}, getInitialState);
 
-  const addItem = (item) => {
-    dispatch({ type: "ADD_ITEM", payload: item });
-  };
+  useEffect(() => {
+    localStorage.setItem("cartState", JSON.stringify(state));
+  }, [state]);
 
-  const removeItem = (id) => {
-    dispatch({ type: "REMOVE_ITEM", payload: id });
-  };
-
-  const updateQuantity = (id, quantity) => {
+  const addItem = (item) => dispatch({ type: "ADD_ITEM", payload: item });
+  const removeItem = (id) => dispatch({ type: "REMOVE_ITEM", payload: id });
+  const updateQuantity = (id, quantity) =>
     dispatch({ type: "UPDATE_QUANTITY", payload: { id, quantity } });
-  };
-
-  const applyCoupon = (code) => {
+  const applyCoupon = (code) =>
     dispatch({ type: "APPLY_COUPON", payload: code });
-  };
-
-  const updateCart = () => {
-    dispatch({ type: "UPDATE_CART" });
-  };
+  const updateCart = () => dispatch({ type: "UPDATE_CART" });
 
   return (
     <CartContext.Provider

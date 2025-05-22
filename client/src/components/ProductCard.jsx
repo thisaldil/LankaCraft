@@ -1,18 +1,9 @@
 import React from "react";
 
-interface ProductCardProps {
-  name: string;
-  image: string;
-  price: number;
-  originalPrice?: number;
-  isOnSale?: boolean;
-  onClick?: () => void; // optional click handler
-}
-
-const ProductCard: React.FC<ProductCardProps> = ({
-  name,
-  image,
-  price,
+const ProductCard = ({
+  name = "Unnamed Product",
+  image = "", // fallback for broken/missing images
+  price = 0,
   originalPrice,
   isOnSale,
   onClick,
@@ -22,10 +13,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
       className="group relative bg-white rounded-xl shadow hover:shadow-lg transition duration-300 p-4 cursor-pointer"
       onClick={onClick}
     >
-      {/* Image Section */}
       <div className="relative w-full aspect-square overflow-hidden rounded-lg bg-gray-100">
         <img
-          src={image}
+          src={image || "/fallback.jpg"} // fallback image if missing
           alt={name}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
@@ -40,17 +30,15 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </div>
         )}
       </div>
-
-      {/* Details */}
-      <div className="mt-4 text-center">
-        <h3 className="text-base md:text-lg font-medium text-gray-800 truncate">
-          {name}
-        </h3>
-        <div className="flex items-center justify-center mt-1 space-x-2">
-          <p className="text-lg font-bold text-gray-900">${price.toFixed(2)}</p>
+      <div className="mt-3 text-left">
+        <h3 className="text-sm font-medium text-gray-800 truncate">{name}</h3>
+        <div className="flex items-center gap-2 mt-1">
+          <p className="text-base font-semibold text-gray-900">
+            Rs. {price.toFixed(2)}
+          </p>
           {originalPrice && originalPrice > price && (
-            <p className="text-sm line-through text-gray-500">
-              ${originalPrice.toFixed(2)}
+            <p className="text-sm text-gray-500 line-through">
+              Rs. {originalPrice.toFixed(2)}
             </p>
           )}
         </div>

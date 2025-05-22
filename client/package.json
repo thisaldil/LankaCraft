@@ -12,6 +12,7 @@
     "cookie-parser": "^1.4.7",
     "express-session": "^1.18.1",
     "firebase": "^11.7.3",
+    "html2pdf.js": "^0.10.3",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.476.0",
     "react": "^19.0.0",
