@@ -1,17 +1,25 @@
-// routes/orderRoutes.js
-const express = require("express");
-const Order = require("../models/Order");
-const router = express.Router();
+const mongoose = require("mongoose");
 
-router.post("/", async (req, res) => {
-  try {
-    const { user, products, totalPrice } = req.body;
-    const order = new Order({ user, products, totalPrice });
-    await order.save();
-    res.status(201).json({ message: "Order placed successfully" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+const OrderSchema = new mongoose.Schema({
+  customerEmail: {
+    type: String,
+    required: true,
+  },
+  items: [
+    {
+      productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+      name: String,
+      price: Number,
+      quantity: Number,
+    },
+  ],
+  total: Number,
+  shippingAddress: {
+    type: String,
+    default: "N/A",
+  },
+  status: { type: String, default: "Pending" },
+  createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = router;
+module.exports = mongoose.model("Order", OrderSchema);

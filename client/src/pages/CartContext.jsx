@@ -48,6 +48,13 @@ const cartReducer = (state, action) => {
 
     default:
       return state;
+
+    case "CLEAR_CART":
+      return {
+        items: [],
+        couponCode: "",
+        discount: 0,
+      };
   }
 };
 
@@ -76,6 +83,7 @@ const CartProvider = ({ children }) => {
   const applyCoupon = (code) =>
     dispatch({ type: "APPLY_COUPON", payload: code });
   const updateCart = () => dispatch({ type: "UPDATE_CART" });
+  const clearCart = () => dispatch({ type: "CLEAR_CART" });
 
   return (
     <CartContext.Provider
@@ -86,6 +94,7 @@ const CartProvider = ({ children }) => {
         updateQuantity,
         applyCoupon,
         updateCart,
+        clearCart,
       }}
     >
       {children}

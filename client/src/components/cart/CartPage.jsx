@@ -6,9 +6,10 @@ import { ArrowLeftIcon, RefreshCwIcon, ArrowRightIcon } from "lucide-react";
 import { useCart } from "../../pages/CartContext";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import html2pdf from "html2pdf.js";
+import axios from "axios";
 
 const CartPage = () => {
-  const { state, updateCart } = useCart();
+  const { state, updateCart, clearCart } = useCart();
   const { items } = state;
   const { setCartQuantity } = useOutletContext();
   const navigate = useNavigate();
@@ -70,22 +71,50 @@ const CartPage = () => {
   };
 
   // Add new function to handle checkout completion
-  const handleCheckoutComplete = () => {
+  const handleCheckoutComplete = async () => {
     const token = localStorage.getItem("customerToken");
+    const email = localStorage.getItem("customerEmail");
 
-    if (!token) {
-      // Redirect to login with redirect back to cart
+    if (!token || !email) {
       navigate("/CustomerLogin?redirect=cart");
       return;
     }
 
-    // Optional: Validate cart has items
     if (state.items.length === 0) {
       alert("Your cart is empty.");
       return;
     }
-    setShowBillPopup(false);
-    setShowPaymentConfirmation(true);
+
+    try {
+      const totalAmount = state.items.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      );
+
+      const orderPayload = {
+        items: state.items.map((item) => ({
+          productId: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+        })),
+        total: totalAmount,
+        shippingAddress: "Sri Lanka", // Optional
+      };
+
+      await axios.post("http://localhost:5000/orders/place", orderPayload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      alert("Order placed successfully");
+      clearCart();
+      navigate("/thank-you");
+    } catch (err) {
+      console.error("Order placement failed:", err);
+      alert("There was an error placing your order.");
+    }
   };
 
   // Add WhatsApp message function

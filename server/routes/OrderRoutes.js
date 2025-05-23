@@ -1,11 +1,8 @@
-// routes/orderRoutes.js
-
 const express = require("express");
-const Order = require("../models/Order");
 const router = express.Router();
+const { placeOrder } = require("../controllers/orderController");
+const verifyFirebaseToken = require("../middleware/firebaseAuth");
 
-router.post("/", async (req, res) => {
-  // Create order logic
-});
+router.post("/place", verifyFirebaseToken, placeOrder);
 
 module.exports = router;

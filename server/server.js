@@ -16,10 +16,12 @@ connectDB();
 // Import routes
 const adminRoutes = require("./routes/adminRoutes");
 const productRoutes = require("./routes/productRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 
 // Use routes
 app.use("/admin", adminRoutes);
 app.use("/products", productRoutes);
+app.use("/orders", orderRoutes);
 
 // Start server
 if (process.env.NODE_ENV !== "deployment") {
