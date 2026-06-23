@@ -1,5 +1,10 @@
 const mongoose = require("mongoose");
+const dns = require("dns");
 require("dotenv").config();
+
+// Force reliable DNS resolution for the Atlas SRV lookup
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
+dns.setDefaultResultOrder("ipv4first");
 
 // URI in the .env file
 const uri = process.env.URI;
